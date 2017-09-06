@@ -1,5 +1,7 @@
 # usda-ndb
 
+[![NPM](https://nodei.co/npm/usda-ndb.png)](https://nodei.co/npm/usda-ndb/)
+
 Get JSON Nutrient Data from ndb.nal.usda.gov.
 
 ```bash
