@@ -1,0 +1,6 @@
+# Tests
+/test
+test.js
+
+# Hidden
+.*
