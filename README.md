@@ -15,3 +15,11 @@ node index 1 100
 # get nutrient info of food id 1 to 100, 20 parallel connections
 node index 1 100 20
 ```
+```javascript
+// using as a javascript module
+var ndb = require('usda-ndb');
+// ndb(<id>)
+
+ndb(1).then((ans) => console.log(ans));
+// {"01001, Butter, salted":{ ... }}
+```
