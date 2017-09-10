@@ -1,13 +1,14 @@
 {
   "name": "usda-ndb",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Get JSON Nutrient Data from ndb.nal.usda.gov.",
   "main": "index.js",
   "scripts": {
+    "install": "if [[ $(uname) == Linux ]]; then cp index.sh index.cmd && chmod +x index.cmd; fi",
     "test": "exit"
   },
   "bin": {
-    "usda-ndb": "index.js"
+    "usda-ndb": "index.cmd"
   },
   "repository": {
     "type": "git",
