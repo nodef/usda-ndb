@@ -41,7 +41,7 @@ const ndb = function(id) {
 };
 
 const $ = function(start, stop, step) {
-  var start = start||0, stop = step||start+1, step = step||1;
+  var start = start||0, stop = stop||start+1, step = step||1;
   const a = {}, inc = Math.sign(step);
   const fetch = (id) => pro.then(() => ndb(id)).then((ans) => _assign(a, ans));
   for(var i=start, pro = Promise.resolve(); i!==stop;) {
