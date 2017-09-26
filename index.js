@@ -43,16 +43,16 @@ const $ = function(id) {
 module.exports = $;
 
 if(require.main===module) {
-  const a = {}, arg = process.argv;
-  const start = arg.length>2? parseInt(arg[2]) : 0;
-  const stop = arg.length>3? parseInt(arg[3]) : start+1;
-  const step = arg.length>4? parseInt(arg[4]) : 8;
+  const z = {}, a = process.argv;
+  const start = a.length>2? parseInt(a[2]) : 0;
+  const stop = a.length>3? parseInt(a[3]) : start+1;
+  const step = a.length>4? parseInt(a[4]) : 8;
   const inc = Math.sign(step);
-  const fetch = (id) => pro.then(() => $(id)).then((ans) => Object.assign(a, ans));
+  const fetch = (id) => pro.then(() => $(id)).then((ans) => Object.assign(z, ans));
   for(var i=start, pro = Promise.resolve(); i!==stop;) {
     for(var I=Math.min(stop, i+step), p=[]; i!==I; i+=inc)
       p.push(fetch(i));
     pro = Promise.all(p);
   }
-  pro.then(() => console.log(JSON.stringify(a)));
+  pro.then(() => console.log(JSON.stringify(z)));
 }
