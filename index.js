@@ -1,14 +1,15 @@
 'use strict';
 const https = require('https');
 const jsdom = require('jsdom');
-const _assign = require('lodash.assign');
 
 const text = function(el) {
+  // 1. get text in element
   if(!el.children.length) return el.textContent;
   return el.firstChild.textContent;
 };
 
 const request = function(path) {
+  // 1. make request with user-agent
   return jsdom.JSDOM.fromURL(`https://ndb.nal.usda.gov${path}`, {
     'userAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
   });
@@ -47,7 +48,7 @@ if(require.main===module) {
   const stop = arg.length>3? parseInt(arg[3]) : start+1;
   const step = arg.length>4? parseInt(arg[4]) : 8;
   const inc = Math.sign(step);
-  const fetch = (id) => pro.then(() => $(id)).then((ans) => _assign(a, ans));
+  const fetch = (id) => pro.then(() => $(id)).then((ans) => Object.assign(a, ans));
   for(var i=start, pro = Promise.resolve(); i!==stop;) {
     for(var I=Math.min(stop, i+step), p=[]; i!==I; i+=inc)
       p.push(fetch(i));
