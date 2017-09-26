@@ -20,7 +20,7 @@ node index 1 100 20
 ```javascript
 // using as a javascript module
 var ndb = require('usda-ndb');
-// ndb(<start>, <stop>, <step>)
+// ndb(<id>)
 
 ndb(1).then((ans) => console.log(ans));
 // {"01001, Butter, salted":{ ... }}

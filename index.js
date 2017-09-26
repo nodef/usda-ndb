@@ -14,7 +14,7 @@ const request = function(path) {
   });
 };
 
-const ndb = function(id) {
+const $ = function(id) {
   return request(`/ndb/foods/show/${id}?format=Full`).then((dom) => {
     const a = {}, b = {}, document = dom.window.document;
     const viewName = document.getElementById('view-name');
@@ -39,23 +39,19 @@ const ndb = function(id) {
     return a;
   });
 };
+module.exports = $;
 
-const $ = function(start, stop, step) {
-  var start = start||0, stop = stop||start+1, step = step||1;
-  const a = {}, inc = Math.sign(step);
-  const fetch = (id) => pro.then(() => ndb(id)).then((ans) => _assign(a, ans));
+if(require.main===module) {
+  const a = {}, arg = process.argv;
+  const start = arg.length>2? parseInt(arg[2]) : 0;
+  const stop = arg.length>3? parseInt(arg[3]) : start+1;
+  const step = arg.length>4? parseInt(arg[4]) : 8;
+  const inc = Math.sign(step);
+  const fetch = (id) => pro.then(() => $(id)).then((ans) => _assign(a, ans));
   for(var i=start, pro = Promise.resolve(); i!==stop;) {
     for(var I=Math.min(stop, i+step), p=[]; i!==I; i+=inc)
       p.push(fetch(i));
     pro = Promise.all(p);
   }
-  return pro.then(() => a);
-};
-module.exports = $;
-
-if(require.main===module) {
-  const a = process.argv;
-  $(parseInt(a[2]), parseInt(a[3]), parseInt(a[4])).then((ans) =>
-    console.log(JSON.stringify(ans))
-  );
+  pro.then(() => console.log(JSON.stringify(a)));
 }
