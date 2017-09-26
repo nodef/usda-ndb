@@ -49,7 +49,7 @@ const $ = function(start, stop, step) {
       p.push(fetch(i));
     pro = Promise.all(p);
   }
-  pro.then(() => a);
+  return pro.then(() => a);
 };
 module.exports = $;
 
