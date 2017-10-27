@@ -1,5 +1,4 @@
 'use strict';
-const https = require('https');
 const jsdom = require('jsdom');
 
 const text = function(el) {
