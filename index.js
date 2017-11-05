@@ -19,7 +19,7 @@ const $ = function(id) {
     const a = {}, b = {}, document = dom.window.document;
     const viewName = document.getElementById('view-name');
     if(viewName==null) return {};
-    const key = viewName.textContent.trim().match(/\d+,.*/g)[0];
+    b['Name'] = viewName.textContent.trim().match(/\d+,.*/g)[0];
     const props = document.querySelectorAll('.prop');
     for(var prop of props) {
       var names = prop.querySelectorAll('.name');
@@ -35,7 +35,7 @@ const $ = function(id) {
       var value = tds[valuei].textContent.trim();
       b[name] = `${value} ${unit}`;
     }
-    a[key] = b;
+    a[id] = b;
     return a;
   }, (err) => {
     const dom = new jsdom.JSDOM(err.error.toString());
