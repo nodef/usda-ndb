@@ -23,5 +23,5 @@ var ndb = require('usda-ndb');
 // ndb(<id>)
 
 ndb(1).then((ans) => console.log(ans));
-// {"01001, Butter, salted":{ ... }}
+// {"1":{"Name":"01001, Butter, salted", ... }
 ```
