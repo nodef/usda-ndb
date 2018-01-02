@@ -8,6 +8,7 @@ Get JSON Nutrient Data from [USDA Nutrient Database].
 usda-ndb [flags] <start> <stop> <step>
 # [-o|--output <file>]: write output to file
 # [-v|--verbose]: get detailed logs
+# [--help]: show help
 
 # get nutrient info of food id 1
 usda-ndb 1
