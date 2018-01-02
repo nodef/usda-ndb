@@ -33,7 +33,7 @@ usda-ndb 1 100 -o somanyfoods.txt -c 20 -t 512 -r 10 -v
 var ndb = require('usda-ndb');
 // ndb(<id>)
 
-ndb(1).then((ans) => console.log(ans));
+ndb('1').then((ans) => console.log(ans));
 // {"Id": "1", "Number": "01001", "Name": "Butter, salted", ...}
 ```
 
