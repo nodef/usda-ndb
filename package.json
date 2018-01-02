@@ -1,6 +1,6 @@
 {
   "name": "usda-ndb",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Get JSON Nutrient Data from ndb.nal.usda.gov.",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,5 @@
     "url": "https://github.com/nodef/usda-ndb/issues"
   },
   "homepage": "https://github.com/nodef/usda-ndb#readme",
-  "dependencies": {
-    "jsdom": "^11.2.0"
-  }
+  "dependencies": {}
 }
