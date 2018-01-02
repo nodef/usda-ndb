@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/usda-ndb.png)](https://nodei.co/npm/usda-ndb/)
 
-Get JSON Nutrient Data from ndb.nal.usda.gov.
+Get JSON Nutrient Data from [USDA Nutrient Database].
 
 ```bash
 # using as command line application
@@ -25,3 +25,6 @@ var ndb = require('usda-ndb');
 ndb(1).then((ans) => console.log(ans));
 // {"1":{"Name":"01001, Butter, salted", ... }
 ```
+
+
+[USDA Nutrient Database]: https://ndb.nal.usda.gov/ndb/
