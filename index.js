@@ -1,4 +1,5 @@
 'use strict';
+const https = require('https');
 const jsdom = require('jsdom');
 
 const text = function(el) {
@@ -7,12 +8,18 @@ const text = function(el) {
   return el.firstChild.textContent;
 };
 
-const request = function(path) {
-  // 1. make request with user-agent
-  return jsdom.JSDOM.fromURL(`https://ndb.nal.usda.gov${path}`, {
-    'userAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+const request = (path) => new Promise((fres, frej) => {
+  var headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'};
+  var opt = {method: 'GET', hostname: 'ndb.nal.usda.gov', path, headers};
+  var req = https.request(opt, (res) => {
+    var dat = '';
+    res.setEncoding('utf8');
+    res.on('data', (chu) => dat += chu);
+    res.on('end', () => res.statusCode/100===2? fres(dat):frej(dat));
   });
-};
+  req.on('error', (e) => frej(e));
+  req.end();
+});
 
 const $ = function(id) {
   return request(`/ndb/foods/show/${id}?format=Full`).then((dom) => {
