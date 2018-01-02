@@ -1,21 +1,54 @@
 'use strict';
 const https = require('https');
 const cheerio = require('cheerio');
+const httpStatus = require('http-status');
 
-const text = function(el) {
+function text(elm) {
   // 1. get text in element
-  if(!el.children.length) return el.textContent;
-  return el.firstChild.textContent;
+  var chd = elm.children();
+  return chd.length>0? chd.text():elm.text();
+};
+
+function nameParts(z, str, id) {
+  // 1. get details from name
+  var ni = str.search(/^\d+/);
+  var si = ni===0? str.indexOf(',')+2:0;
+  var ui = str.search(/UPC: \d+$/);
+  z['Number'] = si>0? str.substring(0, si-2):id;
+  z['Name'] = str.substring(si, ui>0? ui-2:str.length);
+  if(ui>0) z['UPC'] = str.substring(ui+5);
+  return z;
+};
+
+function headerParts(z, $, elm) {
+  // 1. get details from header
+  var names = elm.find('.name');
+  var values = elm.find('.value');
+  for(var i=0, I=names.length; i<I; i++)
+    z[$(names[i]).text().trim().replace(/:/g, '')] = $(values[i]).text().trim();
+};
+
+function bodyParts(z, $, elm, vali) {
+  // 1. get details from body
+  var tds = $(elm).find('td');
+  var name = text($(tds[1])).trim();
+  var unit = $(tds[2]).text().trim();
+  var value = $(tds[vali]).text().trim();
+  z[name] = `${value} ${unit}`;
 };
 
 const request = (path) => new Promise((fres, frej) => {
+  // 1. make request to usda ndb
   var headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'};
   var opt = {method: 'GET', hostname: 'ndb.nal.usda.gov', path, headers};
   var req = https.request(opt, (res) => {
     var dat = '';
     res.setEncoding('utf8');
     res.on('data', (chu) => dat += chu);
-    res.on('end', () => res.statusCode/100===2? fres(dat):frej(new Error(dat)));
+    res.on('end', () => {
+      if(res.statusCode>=200 && res.statusCode<300) fres(dat);
+      else frej(res.statusCode+' '+httpStatus[res.statusCode]);
+    });
   });
   req.on('error', (e) => frej(e));
   req.end();
@@ -23,37 +56,14 @@ const request = (path) => new Promise((fres, frej) => {
 
 const usdaNdb = function(id) {
   return request(`/ndb/foods/show/${id}?format=Full`).then((html) => {
-    var $ = cheerio.load(html), a = {}, b = {};
+    var $ = cheerio.load(html), z = {'Id': id};
     var viewName = $('#view-name');
     if(viewName==null) return {};
-    b['Name'] = viewName.text().trim().match(/\d+,.*/g)[0];
-    var props = $('.prop');
-    for(var i=0, I=props.length; i<I; i++) {
-      var names = $(props[i]).filter('.name');
-      var values = $(props[i]).filter('.value');
-      for(var j=0, J=names.length; j<J; j++)
-        b[$(names[j]).textContent.trim().replace(/:/g, '')] = values[j].textContent.trim();
-    }
-    props.each((i, ele) => {
-      var names = $(ele).filter('.name');
-      var values = $(ele).filter('.value');
-      for(var i=0, I=names.length; i<I; i++)
-        b[names[i].textContent.trim().replace(/:/g, '')] = values[i].textContent.trim();
-    });
-    const valuei = props[0].children[0].textContent==='Manufacturer'? 4 : 3;
-    for(var tr of document.querySelectorAll('#nutdata tbody tr')) {
-      var tds = tr.getElementsByTagName('td');
-      var name = text(tds[1]).trim();
-      var unit = tds[2].textContent.trim();
-      var value = tds[valuei].textContent.trim();
-      b[name] = `${value} ${unit}`;
-    }
-    a[id] = b;
-    return a;
-  }, (e) => {
-    return console.log(e);
-    var $ = cheerio.load(e.error.toString());
-    throw new Error(''+err.statusCode+' - '+dom.window.document.title);
+    nameParts(z, viewName.text().trim().match(/\d+,.*/g)[0], id);
+    $('.prop').each((i, elm) => headerParts(z, $, $(elm)));
+    var vali = z.hasOwnProperty('Manufacturer')? 4:3;
+    $('#nutdata tbody tr').each((i, elm) => bodyParts(z, $, $(elm), vali));
+    return z;
   });
 };
 module.exports = usdaNdb;
