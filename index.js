@@ -49,7 +49,7 @@ function ndb(id) {
   return request(`/ndb/foods/show/${id}?format=Full`).then((html) => {
     var $ = cheerio.load(html), z = {'Id': id};
     var viewName = $('#view-name');
-    if(viewName==null) return {};
+    if(!viewName.length) throw new Error('Bad request id');
     nameParts(z, viewName.text().trim().match(/\d+,.*/g)[0], id);
     $('.prop').each((i, elm) => headerParts(z, $, $(elm)));
     var vali = z.hasOwnProperty('Manufacturer')? 4:3;
