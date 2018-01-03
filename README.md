@@ -3,6 +3,7 @@
 [![NPM](https://nodei.co/npm/usda-ndb.png)](https://nodei.co/npm/usda-ndb/)
 
 Get JSON Nutrient Data from [USDA Nutrient Database].
+> Reliability improved: now with auto retries.
 
 ```bash
 usda-ndb [flags] <start> <stop>
@@ -22,9 +23,8 @@ usda-ndb 1 100
 # {"Id": "2", "Number": "01002", "Name": "Butter, whipped, with salt", ...}
 # ...
 usda-ndb 0 2 --output nutrients.txt
-# STDERR: 1 [ '0' ]
-# (1 is the number of failures, even after retries)
-# ([ '0' ] is the list of failed ids)
+# STDERR: ["0"]
+# (["0"] is the list of failed ids)
 # (id 1 is written to file)
 usda-ndb 1 100 -o somanyfoods.txt -c 20 -t 512 -r 10 -v
 # (try this)
