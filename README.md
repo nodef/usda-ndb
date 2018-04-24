@@ -1,5 +1,7 @@
 # usda-ndb
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/nodef/usda-ndb.svg)](https://greenkeeper.io/)
+
 [![NPM](https://nodei.co/npm/usda-ndb.png)](https://nodei.co/npm/usda-ndb/)
 
 Get JSON Nutrient Data from [USDA Nutrient Database].
